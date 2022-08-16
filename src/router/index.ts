@@ -4,6 +4,7 @@ import CeremonyDashboardVue from '@/views/CeremonyDashboard.vue'
 import StylingVue from '@/views/Styling.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import ScriptBuilderVue from '@/views/ScriptBuilder.vue'
+import TestingVue from '@/views/Testing.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +33,17 @@ const router = createRouter({
       path: '/styling',
       name: 'styling',
       component: StylingVue
-    }
+    },
+    {
+      path: '/testing',
+      name: 'testing',
+      component: TestingVue
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: TestingVue
+    },
     // {
     //   path: '/about',
     //   name: 'about',
