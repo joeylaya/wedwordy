@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import CeremonyAddModal from "../components/CeremonyAddModal.vue";
-import SpouseAddModal from "../components/SpouseAddModal.vue";
+import CeremonyDetails from "../components/CeremonyDetails.vue";
+import CeremonyDetailsSkeleton from "../components/CeremonyDetailsSkeleton.vue";
 </script>
+
 <template>
-<SpouseAddModal />
+<Suspense>
+  <div class="w-100">
+    <CeremonyDetails :ceremonyId="'1'" />
+    <CeremonyDetailsSkeleton />    
+  </div>
+</Suspense>
 </template>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-type Pronouns = "they" | "she" | "he"
-type CeremonialRole = "spouse" | "bride" | "partner" | "groom"
-type PartnershipTitle = "spouse" | "wife" | "partner" | "husband"
+import type { Pronouns, CeremonialRole, PartnershipTitle } from '../stores/ceremonyStore';
 
 const activePage = ref(1)
 

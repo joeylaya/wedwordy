@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { store } from "@/stores/store";
+import { globalStore } from "../stores/globalStore";
 import { ref, watchEffect } from "vue";
-import ChoiceCard from "./ChoiceCard.vue";
-const useStore = store()
+import ButtonChoice from "./ButtonChoice.vue";
+const useGlobalStore = globalStore()
 
 const isActive = ref(false)
 watchEffect(() => {
-  isActive.value = useStore.isScriptSidebarActive
+  if (useGlobalStore.activeBar === 'scriptSidebar') {
+    isActive.value = true
+  } else {
+    isActive.value = false
+  }
 })
 </script>
 
@@ -16,12 +20,12 @@ watchEffect(() => {
       <h1 class="header-1">Select an element type</h1>
     </div>
     <div class="flex flex-wrap gap-4 justify-center content-center sm:(content-start)">
-      <ChoiceCard />
-      <ChoiceCard />
-      <ChoiceCard />
-      <ChoiceCard />
-      <ChoiceCard />
-      <ChoiceCard />
+      <ButtonChoice />
+      <ButtonChoice />
+      <ButtonChoice />
+      <ButtonChoice />
+      <ButtonChoice />
+      <ButtonChoice />
     </div>
   </div>
 </template>

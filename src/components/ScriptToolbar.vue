@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { store } from '@/stores/store';
-const useStore = store()
-const isExpanded = ref(false)
-const toggleExpansion = () => {
-  isExpanded.value = !isExpanded.value
-}
+import { globalStore } from '../stores/globalStore';
+import ButtonPrimary from './ButtonPrimary.vue';
+
 const handleSave = () => {
 
 }
 const handleAddElement = () => {
-  useStore.isScriptSidebarActive = true
+  
 }
 const handleReorder = () => {
 
@@ -21,54 +18,75 @@ const handleExpandAll = () => {
 const handleCollapseAll = () => {
 
 }
+const buttonPrimaryProps = [
+  {
+    id: "save",
+    ariaLabel: "save script",
+    icon: "fi-br-check",
+    label: "Save",
+    clickEvent: handleSave
+  },
+  {
+    id: "addElement",
+    ariaLabel: "add element to script",
+    icon: "fi-br-plus",
+    label: "Add Element",
+    clickEvent: handleAddElement
+  },
+  {
+    id: "reorder",
+    ariaLabel: "reorder script elements",
+    icon: "fi-br-apps-sort",
+    label: "Reorder",
+    clickEvent: handleReorder
+  },
+  {
+    id: "expandAll",
+    ariaLabel: "expand all script elements",
+    icon: "fi-br-angle-down",
+    label: "Expand All",
+    clickEvent: handleExpandAll
+  },
+  {
+    id: "collapseAll",
+    ariaLabel: "collapse all script elements",
+    icon: "fi-br-angle-up",
+    label: "Collapse All",
+    clickEvent: handleCollapseAll
+  }
+]
+defineEmits([ 'deactivate' ])
 </script>
 
 <template>
-<button @click="toggleExpansion" class="btn fixed top-0 right-0 p-4 sm:(hidden)" :class="isExpanded ? 'hidden' : ''">
-  <div class="icon text-gray-400">
-    <i class="fi fi-br-pencil h-4 text-lg"></i>
-  </div>          
-</button>
-<div class="flex flex-col gap-4 sm:(flex-row)" :class="isExpanded ? '<sm:(bg-gray-100 p-4 h-full shadow fixed top-0 right-0 z-20)' : '<sm:(hidden)'">
-  <div class="flex justify-between sm:(hidden)">
-    <h4 class="header-4">Toolbar</h4>
-    <button @click="toggleExpansion" class="btn">
-      <div class="icon text-gray-400 text-sm">
-        <i class="fi fi-br-angle-right h-4"></i>
+  <section
+    id="scriptToolbar"
+    aria-label="script toolbar"
+    class="h-full p-4 flex flex-col gap-4 shadow bg-gray-100 fixed top-0 right-0 sm:(h-auto p-0 flex-row shadow-none bg-transparent relative)"
+  >
+    <header class="flex justify-between sm:(hidden)">
+      <h4 class="header-4">Toolbar</h4>
+      <button
+        id="deactivateScriptToolbar"
+        aria-label="deactivate script toolbar"
+        @click="$emit('deactivate')"
+        class="btn"
+      >
+        <div class="icon text-gray-400 text-sm">
+          <i class="fi fi-br-angle-right h-4"></i>
+        </div>
+      </button>
+    </header>
+    <div class="flex flex-col gap-2 sm:(flex-row)">
+      <div v-for="props in buttonPrimaryProps">
+        <ButtonPrimary
+          :id="props.id"
+          :ariaLabel="props.ariaLabel"
+          :icon="props.icon"
+          :label="props.label"
+          @clicked="props.clickEvent"
+        />
       </div>
-    </button>
-  </div>
-  <div class="flex flex-col gap-2 sm:(flex-row)">
-    <button @click="handleSave" class="btn btn-1">
-      <div class="icon icon-btn">
-        <i class="fi fi-br-check h-4"></i>
-      </div>
-      <h5>Save</h5>
-    </button>
-    <button @click="handleAddElement" class="btn btn-1 sm:(hidden)">
-      <div class="icon icon-btn">
-        <i class="fi fi-br-plus h-4"></i>
-      </div>
-      <h5>Add Element</h5>
-    </button>
-    <button @click="handleReorder" class="btn btn-1">
-      <div class="icon icon-btn">
-        <i class="fi fi-br-apps-sort h-4"></i>
-      </div>
-      <h5>Reorder</h5>
-    </button>
-    <button @click="handleExpandAll" class="btn btn-1">
-      <div class="icon icon-btn">
-        <i class="fi fi-br-angle-down h-4"></i>
-      </div>
-      <h5>Expand All</h5>
-    </button>
-    <button @click="handleCollapseAll" class="btn btn-1">
-      <div class="icon icon-btn">
-        <i class="fi fi-br-angle-up h-4"></i>
-      </div>
-      <h5>Collapse All</h5>
-    </button>
-  </div>
-</div>
+    </div>
+  </section>
 </template>

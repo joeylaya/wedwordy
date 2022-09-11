@@ -1,47 +1,68 @@
 <script setup lang="ts">
-import Navbar from "@/components/Navbar.vue";
-import CeremonyDisplayCard from "../components/CeremonyDisplayCard.vue";
-import ScriptPreviewCard from "../components/ScriptPreviewCard.vue";
-import EditorPreviewCard from "../components/EditorPreviewCard.vue";
 import { ref, watchEffect } from "vue";
-import { store } from "@/stores/store";
-const useStore = store()
+import Navbar from "../components/Navbar.vue";
+import CeremonyDetails from "../components/CeremonyDetails.vue";
+import EditorWidget from "../components/EditorWidget.vue";
+import ScriptWidget from "../components/ScriptWidget.vue";
+import { globalStore } from "../stores/globalStore";
+import { useRoute } from "vue-router";
+import { ceremonyStore } from "../stores/ceremonyStore";
+import ScriptWidgetSkeleton from "../components/ScriptWidgetSkeleton.vue";
+import EditorWidgetSkeleton from "../components/EditorWidgetSkeleton.vue";
+import CeremonyDetailsSkeleton from "../components/CeremonyDetailsSkeleton.vue";
+import ScriptTemplateForm from "../components/ScriptTemplateForm.vue";
+import ScriptTemplateModal from "../components/ScriptTemplateModal.vue";
 
-const isNavbarExpanded = ref(useStore.isNavbarExpanded)
-watchEffect(() => {
-  isNavbarExpanded.value = useStore.isNavbarExpanded
-})
+const useGlobalStore = globalStore()
+const { activeBar } = useGlobalStore
+
+const ceremonyId = useRoute().params
+console.log(`Ceremony ID is ${ceremonyId.id}`)
 </script>
 
 <template>
 <Suspense>
-<div class="flex">
-  <Navbar />
-  <div class="w-screen mb-18 pl-4 py-4 flex flex-col gap-2 sm:(ml-24 p-16 gap-6)" :class="isNavbarExpanded ? 'sm:(ml-46)' : 'sm:(ml-8)'">
-    <header class="page-header">Ceremony Dashboard</header>
-    <main class="w-full flex flex-col gap-6 sm:(gap-8) xl:(flex-row)">
-      <section id="ceremonyDetails" class="pr-4 sm:(pr-0)">
-        <CeremonyDisplayCard />        
-      </section>
-      <div class="w-full flex flex-col gap-6 sm:(gap-8)">
-        <section id="scripts" class="w-full overflow-x-scroll flex gap-4 sm:(pl-8 py-8 gap-8 rounded-3xl shadow bg-gray-100)">
-          <header class="absolute header-2 text-gray-800">Scripts</header>
-          <div class="pt-10 flex gap-4 sm:(flex-wrap pt-16 gap-6)">
-            <ScriptPreviewCard />
-            <ScriptPreviewCard />
-            <ScriptPreviewCard />
-          </div>
+  <div class="flex">
+    <Navbar />
+    <div
+      class="page"
+      :class="activeBar === 'navbar' ? 'sm:(ml-46)' : 'sm:(ml-8)'"
+    >
+      <header class="page-header">
+        <h1>Ceremony Dashboard</h1>
+      </header>
+      <main class="w-full flex flex-col gap-6 sm:(gap-8) xl:(flex-row)">
+        <section id="ceremonyDetails" aria-label="ceremony details" class="pr-4 sm:(pr-0)">
+          <CeremonyDetails :ceremonyId="ceremonyId.id" />
         </section>
-        <section id="editors" class="w-full overflow-x-scroll flex gap-4 sm:(pl-8 py-8 gap-8 rounded-3xl shadow bg-gray-100)">
-          <header class="absolute header-2 text-gray-800">Editors</header>
-          <div class="pt-10 flex gap-4 sm:(flex-wrap pt-16 gap-6)">
-            <EditorPreviewCard />
-            <EditorPreviewCard />
-          </div>
-        </section>        
-      </div>
-    </main>
-  </div>      
-</div>
+        <section id="widgets" aria-label="script and editor widgets" class="w-full flex flex-col gap-6 sm:(gap-8)">
+          <ScriptWidget :ceremonyId="ceremonyId.id" />
+          <EditorWidget :ceremonyId="ceremonyId.id" />
+        </section>
+      </main>
+    </div>      
+  </div>
+  <template #fallback>
+    <div class="flex">
+      <Navbar />
+      <div class="page">
+        <header class="page-header">
+          <h1>Ceremony Dashboard</h1>
+        </header>
+        <main class="w-full flex flex-col gap-6 sm:(gap-8) xl:(flex-row)">
+          <section id="ceremonyDetails" aria-label="ceremony details" class="pr-4 sm:(pr-0)">
+            <CeremonyDetailsSkeleton />
+          </section>
+          <section id="widgets" aria-label="script and editor widgets" class="w-full flex flex-col gap-6 sm:(gap-8)">
+            <ScriptWidgetSkeleton />
+            <EditorWidgetSkeleton />
+          </section>
+        </main>
+      </div>      
+    </div>
+  </template>
 </Suspense>
+<Teleport to="body">
+  <ScriptTemplateModal />
+</Teleport>
 </template>

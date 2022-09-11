@@ -8,7 +8,7 @@ const toggleExpansion = () => {
 </script>
 
 <template>
-<div
+<button
   @click="toggleExpansion"
   class="card p-6 justify-center"
   :class="isExpanded ? 'gap-2 bg-gray-100' : 'h-14 gradient-300 hover:(gradient-500) sm:(h-20)'"
@@ -25,5 +25,5 @@ const toggleExpansion = () => {
   >
     Sit volutpat risus vulputate gravida condimentum commodo. Placerat habitant id penatibus mattis odio consectetur fames. Donec fusce nam a massa id sit. Enim duis rutrum mus urna bibendum. In dolor massa vivamus interdum purus lectus euismod.
   </p>
-</div>
+</button>
 </template>

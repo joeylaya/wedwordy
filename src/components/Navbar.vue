@@ -2,8 +2,8 @@
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useRoute } from 'vue-router';
 import { ref, watchEffect } from 'vue';
-import { store } from '@/stores/store';
-
+import { globalStore } from '../stores/globalStore';
+const useGlobalStore = globalStore()
 const activePage = ref(useRoute().name)
 watchEffect(() => {
   activePage.value = useRoute().name
@@ -13,7 +13,7 @@ watchEffect(() => {
 const isExpanded = ref(false)
 const toggleExpansion = () => {
   isExpanded.value = !isExpanded.value
-  store().isNavbarExpanded = isExpanded.value
+  isExpanded.value ? useGlobalStore.activeBar = 'navbar' : useGlobalStore.activeBar = null
 }
 const handleScripts = () => {
 
